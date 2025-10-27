@@ -1,0 +1,3 @@
+[submodule "lib/AoC-toolbox"]
+	path = lib/AoC-toolbox
+	url = git@github.com:JalilBNH/AoC-toolbox.git
