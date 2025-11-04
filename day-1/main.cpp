@@ -6,26 +6,40 @@
 #include <tuple>
 #include "aoc/dataparser.h"
 
-// std::tuple<std::vector<int>, std::vector<int>> twoColsParser(std::string inputPath)
-// {
-//     int num1, num2;
-//     std::vector<int> list1, list2;
-//     std::string inputLine;
-//     std::ifstream inputFile(inputPath);
+int computeDistance(std::vector<int> v1, std::vector<int> v2);
+int computeSimilarity(std::vector <int> v1, std::vector<int> v2);
 
-//     while (getline(inputFile, inputLine))
-//     {
-//         num1 = stoi(inputLine.substr(0, inputLine.find(" ")));
-//         num2 = stoi(inputLine.substr(inputLine.find(" ") + 3, inputLine.size() - 1));
+int main()
+{
+    std::tuple<std::vector<int>, std::vector<int>> listInput;
+    std::vector<int> list1, list2;
 
-//         list1.push_back(num1);
-//         list2.push_back(num2);
-//     }
+    int dist, simScore;
+    int j = 0;
+    int counter = 0;
 
-//     inputFile.close();
+    
+    listInput = aoc::twoColsParser("./day-1/input.txt");
 
-//     return {list1, list2};
-// }
+    list1 = std::get<0>(listInput);
+    list2 = std::get<1>(listInput);
+
+    sort(list1.begin(), list1.end());
+    sort(list2.begin(), list2.end());
+
+    // first part
+    dist = computeDistance(list1, list2); 
+    std::cout << "part 1 : " << dist << "\n";
+
+    // second part
+    
+    simScore = computeSimilarity(list1, list2);
+    std::cout << "part 2 : " << simScore << "\n";
+
+    return 0;
+}
+
+
 
 int computeDistance(std::vector<int> v1, std::vector<int> v2)
 {
@@ -64,34 +78,4 @@ int computeSimilarity(std::vector <int> v1, std::vector<int> v2)
     }
 
     return simScore;
-}
-
-int main()
-{
-    std::tuple<std::vector<int>, std::vector<int>> listInput;
-    std::vector<int> list1, list2;
-
-    int dist, simScore;
-    int j = 0;
-    int counter = 0;
-
-    
-    listInput = aoc::twoColsParser("./day-1/input.txt");
-
-    list1 = std::get<0>(listInput);
-    list2 = std::get<1>(listInput);
-
-    sort(list1.begin(), list1.end());
-    sort(list2.begin(), list2.end());
-
-    // first part
-    dist = computeDistance(list1, list2); 
-    std::cout << "part 1 : " << dist << "\n";
-
-    // second part
-    
-    simScore = computeSimilarity(list1, list2);
-    std::cout << "part 2 : " << simScore << "\n";
-
-    return 0;
 }
