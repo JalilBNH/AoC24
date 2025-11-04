@@ -5,66 +5,57 @@
 #include <vector>
 #include <cmath>
 #include <bits/stdc++.h>
+#include <tuple>
+#include "aoc/dataparser.h"
 
-std::vector<std::vector<int>> stringToIntTab(std::string inputPath);
-bool comp(int a, int b);
+
 bool checkStepCondition(int a, int b);
-bool isSorted(std::vector<int> line);
-bool checkLineStep(std::vector<int> line);
+void updateFlags(int a, int b, bool *isIncreasing, bool *isDecreasing);
 bool isLineSafe(std::vector<int> line);
-bool secondChance(std::vector<int> line);
 
 int main()
 {
     int least = 1;
     int most = 3;
     bool safeState;
+    int idxRemove;
     int increaseState;
     int safeCount = 0;
+    
 
     int diff;
     int pDiff;
 
     std::vector<std::vector<int>> input;
+    std::vector <int> inputCopy;
 
-    input = stringToIntTab("./input.txt");
+    input = aoc::stringToIntTab("./day-2/input.txt");
 
     std::cout << "Input size : " << input.size() << std::endl;
     for (int i = 0; i < input.size(); i++)
     {
-        if (isLineSafe(input[i]))
+        safeState = isLineSafe(input[i]);
+        if (safeState)
         {
             safeCount++;
+        }
+        else
+        {
+            int j = 0;
+            while (!safeState && j < input[i].size())
+            {
+                inputCopy = input[i];
+                inputCopy.erase(inputCopy.begin()+j);
+                safeState = isLineSafe(inputCopy);
+                j++;
+            }
+            if (safeState){safeCount++;}
         }
     }
 
     std::cout << "Safe count : " << safeCount << std::endl;
 
     return 0;
-}
-
-std::vector<std::vector<int>> stringToIntTab(std::string inputPath)
-{
-    std::ifstream inputFile(inputPath);
-    std::string inputLine;
-    int number;
-
-    std::vector<std::vector<int>> input;
-
-    while (getline(inputFile, inputLine))
-    {
-        std::stringstream iss(inputLine);
-        std::vector<int> line;
-
-        while (iss >> number)
-        {
-            line.push_back(number);
-        }
-        input.push_back(line);
-    }
-
-    inputFile.close();
-    return input;
 }
 
 
