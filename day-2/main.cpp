@@ -12,6 +12,7 @@ bool checkStepCondition(int a, int b);
 bool isSorted(std::vector<int> line);
 bool checkLineStep(std::vector<int> line);
 bool isLineSafe(std::vector<int> line);
+bool secondChance(std::vector<int> line);
 
 int main()
 {
@@ -66,19 +67,6 @@ std::vector<std::vector<int>> stringToIntTab(std::string inputPath)
     return input;
 }
 
-bool comp(int a, int b)
-{
-    return a > b;
-}
-
-bool isSorted(std::vector<int> line)
-{
-    if (std::is_sorted(line.begin(), line.end()) || std::is_sorted(line.begin(), line.end(), comp))
-    {
-        return true;
-    }
-    return false;
-}
 
 bool checkStepCondition(int a, int b)
 {
@@ -92,8 +80,16 @@ bool checkStepCondition(int a, int b)
     return true;
 }
 
-bool checkLineStep(std::vector<int> line)
+void updateFlags(int a, int b, bool *isIncreasing, bool *isDecreasing)
 {
+    if (a > b){*isDecreasing = false;} 
+    else {*isIncreasing = false;}
+}
+
+bool isLineSafe(std::vector<int> line)
+{
+    bool isIncreasing = true;
+    bool isDecreasing = true;
 
     for (int i = 0; i < line.size() - 1; i++)
     {
@@ -101,20 +97,13 @@ bool checkLineStep(std::vector<int> line)
         {
             return false;
         }
+        
+        updateFlags(line[i], line[i+1], &isIncreasing, &isDecreasing);
+
+        if (!isIncreasing && !isDecreasing)
+        {
+            return false;
+        }
     }
     return true;
-}
-
-bool isLineSafe(std::vector<int> line)
-{
-    bool sorted, stepCondition;
-
-    sorted = isSorted(line);
-    stepCondition = checkLineStep(line);
-
-    if (sorted && stepCondition)
-    {
-        return true;
-    }
-    return false;
 }
