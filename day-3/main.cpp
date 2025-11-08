@@ -9,11 +9,11 @@ int main()
 {
     std::ifstream inputFile("./input.txt");
     std::string input;
-    int digit1, digit2;
     int res = 0;
     char c;
+    bool doCheck = true;
 
-    std::regex regMul(R"foo((mul\()(\d+),(\d+)\))foo");
+    std::regex regMul(R"foo(do\(\)|don\'t\(\)|mul\((\d+),(\d+)\))foo");
 
     
     while (inputFile.get(c))
@@ -27,12 +27,19 @@ int main()
 
     for (std::sregex_iterator i = begin; i != end; i++)
     {
-        std::smatch match = *i; 
-        digit1 = std::stoi(match[2].str());
-        digit2 = std::stoi(match[3].str());
-        res += digit1 * digit2;
+        std::smatch match = *i;
+        
+        if (match.str() == "don't()"){doCheck = false;}
+        else if (match.str() == "do()"){doCheck = true;}
+        else 
+        {
+            if (doCheck)
+            {
+                res += std::stoi(match[1].str()) * std::stoi(match[2].str());
+            }    
+        }
     }
-    std::cout << "Result : "<< res << '\n';
+    std::cout << "Result : "<< res << std::endl;
 }
 
 
